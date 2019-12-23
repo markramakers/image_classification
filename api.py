@@ -1,6 +1,7 @@
 from flask import Flask, send_from_directory, request, render_template, jsonify
 from pathlib import Path
 import tensorflow as tf
+import PIL
 from PIL import Image
 import numpy as np
 
@@ -27,16 +28,16 @@ def send_js(path):
 def predict():
     print(request.files)
     file = request.files['file']
-    print(file)
 
     img = Image.open(request.files['file'].stream).convert("L")
-    img = img.resize((28, 28))
-    im2arr = np.array(img)
+    img_resized = img.resize((28, 28), resample=PIL.Image.BICUBIC)
+    im2arr = np.array(img_resized)
     im2arr = im2arr.reshape(1, 28, 28)
-    y_pred = model.predict(im2arr)
-    print("Prediction", y_pred)
+    im2arr_norm = im2arr / 255.0
+    im2arr_norm_inv = abs(im2arr_norm - 1)
+    y_pred = model.predict(im2arr_norm_inv)
     predictions = {
-        label: float(y_pred[0][label])
+        label: "{:.2f}".format((y_pred[0][label]))
         for label in range(0, 10)
     }
     print(predictions)
