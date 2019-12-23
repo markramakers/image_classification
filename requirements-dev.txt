@@ -1,0 +1,6 @@
+-r requirements-test.txt
+tox~=3.12.1
+isort~=4.3.20
+mypy~=0.670
+flake8~=3.7.5
+black~=19.3b0

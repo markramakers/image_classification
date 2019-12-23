@@ -1,0 +1,6 @@
+sklearn==0.0
+pandas==0.23.4
+jupyter==1.0.0
+Flask==1.0.2
+dataclasses==0.6
+requests==2.22
